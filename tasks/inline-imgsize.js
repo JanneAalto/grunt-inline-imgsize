@@ -62,15 +62,27 @@ module.exports = function(grunt) {
 
             var request = http.get(src, function (response) {
                 imagesize(response, function (err, result) {
-                    // do something with result
-                    res.dimensions = result;
-                    deferred.resolve(res);
 
-                    // we don't need more data
-                    request.abort();
+                    if (!err) {
+                        // do something with result
+                        res.dimensions = result;
+                        deferred.resolve(res);
+
+                        // we don't need more data
+                        request.abort(); // {type, width, height}
+                    }else{
+                        grunt.log.warn(err + ' : ' + src);
+                        res.dimensions = {'type':'', width:'', height:''};
+                        deferred.resolve(res);
+                        request.abort();
+                    }
+
+
 
                     //done();
                 });
+            }).on('error', function(e) {
+                grunt.log.warn("Got error: " + e.message);
             });
             return deferred.promise;
         };
@@ -119,10 +131,12 @@ module.exports = function(grunt) {
                 Q.all(resolved).then(function(response){
 
                     response.forEach(function(res){
+
                         var replacement = res.tag.replace(/^<img/, "<img width=\"" + res.dimensions.width + "\" height=\"" + res.dimensions.height + "\"");
                         contents = contents.replace(res.tag, replacement);
 
                         grunt.file.write(path, contents, fileOptions);
+
                     });
 
                 }).done(function(){
