@@ -20,15 +20,15 @@
     "test": "grunt test"
   },
   "dependencies": {
-    "imagesize": "~1.0.0"
+    "imagesize": "~1.0.0",
+    "q": "^1.4.1"
   },
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-clean": "~0.4.0",
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-jshint": "~0.2.0",
-    "grunt-contrib-nodeunit": "*",
-    "q": "^1.4.1"
+    "grunt-contrib-nodeunit": "*"
   },
   "peerDependencies": {
     "grunt": "~0.4.0"
